@@ -1,0 +1,58 @@
+/**************************************************************************
+*                                                                         *
+*   MLPlayer - Multi-language player                                      *
+*                                                                         *
+*   Copyright (C) 2010, Dmitry Konishchev                                 *
+*   http://konishchevdmitry.blogspot.com/                                 *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 3 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the          *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+**************************************************************************/
+
+
+#ifndef MLPLAYER_HEADER_CONFIG
+#define MLPLAYER_HEADER_CONFIG
+
+#include <mlib/core/types.hpp>
+
+
+/// Application name.
+#define MLPLAYER_APP_NAME "@APP_NAME@"
+
+/// Application binary file name.
+#define MLPLAYER_APP_UNIX_NAME "@APP_UNIX_NAME@"
+
+
+/// Application version string.
+#define MLPLAYER_VERSION "@APP_VERSION@"
+
+/// Application major version.
+#define MLPLAYER_VERSION_MAJOR @APP_VERSION_MAJOR@
+
+/// Application minor version.
+#define MLPLAYER_VERSION_MINOR @APP_VERSION_MINOR@
+
+/// Application patch version.
+#define MLPLAYER_VERSION_PATCH @APP_VERSION_PATCH@
+
+
+// TODO
+///// Application's binaries' directory (relative to install prefix).
+//#define MLPLAYER_APP_BIN_DIR "@APP_BIN_DIR@"
+//
+///// Application's icons' directory (relative to install prefix).
+//#define MLPLAYER_APP_ICONS_DIR "@APP_ICONS_DIR@"
+//
+///// Application's translations' directory (relative to install prefix).
+//#define MLPLAYER_APP_TRANSLATIONS_DIR "@APP_TRANSLATIONS_DIR@"
+
+#endif
+

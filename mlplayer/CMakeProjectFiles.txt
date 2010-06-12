@@ -1,0 +1,12 @@
+set(MLPLAYER_SOURCES
+	main.cpp
+)
+
+set(MLPLAYER_MOC_SOURCES
+)
+
+set(MLPLAYER_TRANSLATIONS
+)
+
+set(MLPLAYER_UIS
+)
