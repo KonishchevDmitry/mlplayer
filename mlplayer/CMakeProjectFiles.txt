@@ -1,12 +1,18 @@
 set(MLPLAYER_SOURCES
 	main.cpp
+	main_window.cpp
+	player.cpp
 )
 
 set(MLPLAYER_MOC_SOURCES
+	main_window.hpp
+	player.hpp
+	player_private.hpp
 )
 
 set(MLPLAYER_TRANSLATIONS
 )
 
 set(MLPLAYER_UIS
+	main_window.ui
 )
