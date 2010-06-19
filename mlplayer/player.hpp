@@ -21,15 +21,8 @@
 #ifndef MLPLAYER_PLAYER
 #define MLPLAYER_PLAYER
 
-#include <memory>
-
+class QStackedLayout;
 #include <QtGui/QWidget>
-
-namespace Phonon {
-	class AudioOutput;
-	class Path;
-	class VideoWidget;
-}
 
 #include <mlplayer/common.hpp>
 
@@ -82,17 +75,8 @@ class Player: public QWidget
 		size_t						current_video_id;
 
 
-		/// Sends data to output devices.
-		Phonon::AudioOutput*		audio;
-
-		/// Audio connection path.
-		std::auto_ptr<Phonon::Path>	audio_path;
-
-		/// Renders our videos.
-		Phonon::VideoWidget*		widget;
-
-		/// Video connection path.
-		std::auto_ptr<Phonon::Path>	video_path;
+		/// Layout with video widgets.
+		QStackedLayout* const		video_layout;
 
 
 	private:

@@ -37,11 +37,15 @@ namespace mlplayer {
 namespace Player_aux {
 
 
-	Video::Video(const QString& file_path, QObject* parent)
+	Video::Video(const QString& file_path, QWidget* parent)
 	:
 		QObject(parent),
-		object( new Phonon::MediaObject(this) )
+		object( new Phonon::MediaObject(this) ),
+		audio( new Phonon::AudioOutput(Phonon::VideoCategory, this) ),
+		widget( new Phonon::VideoWidget(parent) )
 	{
+		Phonon::createPath(this->object, this->audio);
+		Phonon::createPath(this->object, this->widget);
 		this->object->setCurrentSource(file_path);
 	}
 
@@ -53,17 +57,8 @@ Player::Player(QWidget *parent)
 :
 	QWidget(parent),
 	state(LOADING),
-
-	audio( new Phonon::AudioOutput(Phonon::VideoCategory, this) ),
-	audio_path( new Phonon::Path ),
-	widget( new Phonon::VideoWidget(this) ),
-	video_path( new Phonon::Path )
+	video_layout(new QStackedLayout(this))
 {
-	QStackedLayout* layout = new QStackedLayout;
-	layout->addWidget(this->widget);
-	this->setLayout(layout);
-	this->widget->show();
-
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi");
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.s01e16.rus.LostFilm.TV.avi");
 }
@@ -81,6 +76,8 @@ void Player::add_video(const QString& file_path)
 	Video* video = new Video(file_path, this);
 	connect(video->object, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
 		this, SLOT(video_source_state_changed()) );
+	this->video_layout->addWidget(video->widget);
+	video->widget->show();
 	this->videos << video;
 }
 
@@ -177,14 +174,7 @@ void Player::set_current_video(size_t id)
 
 	MLIB_D("Setting current video to the '%1'...",
 		this->current_video->object->currentSource().fileName() );
-
-	this->audio_path->disconnect();
-	this->audio_path = std::auto_ptr<Phonon::Path>(new Phonon::Path(
-		Phonon::createPath(this->current_video->object, this->audio) ));
-
-	this->video_path->disconnect();
-	this->video_path = std::auto_ptr<Phonon::Path>(new Phonon::Path(
-		Phonon::createPath(this->current_video->object, this->widget) ));
+	this->video_layout->setCurrentIndex(id);
 }
 
 

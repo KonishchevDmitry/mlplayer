@@ -21,7 +21,13 @@
 #ifndef MLPLAYER_PLAYER_PRIVATE
 #define MLPLAYER_PLAYER_PRIVATE
 
-#include <Phonon/MediaObject>
+class QWidget;
+
+namespace Phonon {
+	class AudioOutput;
+	class MediaObject;
+	class VideoWidget;
+}
 
 #include <mlplayer/common.hpp>
 
@@ -35,12 +41,19 @@ class Video: public QObject
 	Q_OBJECT
 
 	public:
-		Video(const QString& file_path, QObject* parent = NULL);
+		Video(const QString& file_path, QWidget* parent = NULL);
 
 
 	public:
 		/// Represents our video as an object.
 		Phonon::MediaObject* const	object;
+
+		/// Sends data to output devices.
+		Phonon::AudioOutput* const	audio;
+
+		/// Renders our video.
+		Phonon::VideoWidget* const	widget;
+
 };
 
 
