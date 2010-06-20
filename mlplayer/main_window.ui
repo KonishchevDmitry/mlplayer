@@ -19,7 +19,7 @@
      <widget class="mlplayer::Player" name="player" native="true"/>
     </item>
     <item>
-     <widget class="QWidget" name="widget_2" native="true"/>
+     <widget class="mlplayer::Subtitles_view" name="subtitles" native="true"/>
     </item>
    </layout>
   </widget>
@@ -40,6 +40,12 @@
    <class>mlplayer::Player</class>
    <extends>QWidget</extends>
    <header>player.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>mlplayer::Subtitles_view</class>
+   <extends>QWidget</extends>
+   <header>subtitles_view.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
