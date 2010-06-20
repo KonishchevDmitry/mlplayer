@@ -1,6 +1,6 @@
 /**************************************************************************
 *                                                                         *
-*   MLPlayer - Multi-language player                                      *
+*   MLPlayer - Multi-language video player                                *
 *                                                                         *
 *   Copyright (C) 2010, Dmitry Konishchev                                 *
 *   http://konishchevdmitry.blogspot.com/                                 *
