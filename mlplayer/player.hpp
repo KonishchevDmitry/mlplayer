@@ -18,8 +18,8 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_PLAYER
-#define MLPLAYER_PLAYER
+#ifndef MLPLAYER_HEADER_PLAYER
+#define MLPLAYER_HEADER_PLAYER
 
 class QStackedLayout;
 #include <QtGui/QWidget>
@@ -54,7 +54,6 @@ class Player: public QWidget
 
 	public:
 		Player(QWidget* parent = 0);
-		~Player(void);
 
 
 	private:
@@ -103,8 +102,14 @@ class Player: public QWidget
 		/// Starts playing.
 		void	play(void);
 
+		/// Toggles playing/pausing state.
+		void	play_pause(void);
+
 		/// Switches to the previous track.
 		void	previous_track(void);
+
+		/// Seeks video from the current position.
+		void	seek(int seconds);
 
 	private slots:
 		/// Called when video source state changes.

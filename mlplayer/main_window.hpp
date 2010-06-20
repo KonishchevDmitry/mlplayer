@@ -18,11 +18,12 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_MAIN_WINDOW
-#define MLPLAYER_MAIN_WINDOW
+#ifndef MLPLAYER_HEADER_MAIN_WINDOW
+#define MLPLAYER_HEADER_MAIN_WINDOW
 
 #include <boost/scoped_ptr.hpp>
 
+class QKeySequence;
 #include <QtGui/QMainWindow>
 
 #include <mlplayer/common.hpp>
@@ -45,8 +46,34 @@ class Main_window: public QMainWindow
 		Main_window(QWidget* parent = 0);
 		~Main_window(void);
 
+
 	private:
 		boost::scoped_ptr<Ui::Main_window> ui;
+
+
+	private:
+		/// Creates a hotkey connection.
+		void	create_shortcut(const QKeySequence& key, QObject* target, const char* slot);
+
+
+	private slots:
+		/// Seeks video from current position by the big jump.
+		void	seek_left_big(void);
+
+		/// Seeks video from current position by the ordinary jump.
+		void	seek_left_ordinary(void);
+
+		/// Seeks video from current position by the small jump.
+		void	seek_left_small(void);
+
+		/// Seeks video from current position by the big jump.
+		void	seek_right_big(void);
+
+		/// Seeks video from current position by the ordinary jump.
+		void	seek_right_ordinary(void);
+
+		/// Seeks video from current position by the small jump.
+		void	seek_right_small(void);
 };
 
 

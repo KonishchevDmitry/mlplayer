@@ -18,6 +18,10 @@
 **************************************************************************/
 
 
-#include <mlib/core.hpp>
+#ifndef MLPLAYER_HEADER_COMMON
+#define MLPLAYER_HEADER_COMMON
 
+#include <mlib/core.hpp>
 #include <mlplayer/config.hpp>
+
+#endif

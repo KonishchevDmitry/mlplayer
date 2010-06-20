@@ -17,6 +17,7 @@
 *                                                                         *
 **************************************************************************/
 
+#include <QtGui/QKeySequence>
 #include <QtGui/QShortcut>
 
 #include <mlplayer/common.hpp>
@@ -36,18 +37,17 @@ Main_window::Main_window(QWidget *parent)
 	ui->setupUi(this);
 
 	// Setting up shortcuts -->
-	{
-		QShortcut* shortcut;
+		this->create_shortcut( Qt::Key_Space, ui->player, SLOT(play_pause()) );
 
-		shortcut = new QShortcut(Qt::Key_Space, this);
-		connect(shortcut, SIGNAL(activated()), ui->player, SLOT(play()));
+		this->create_shortcut( Qt::Key_Left, this, SLOT(seek_left_small()) );
+		this->create_shortcut( Qt::Key_Right, this, SLOT(seek_right_small()) );
+		this->create_shortcut( Qt::Key_Comma, this, SLOT(seek_left_ordinary()) );
+		this->create_shortcut( Qt::Key_Period, this, SLOT(seek_right_ordinary()) );
+		this->create_shortcut( Qt::Key_M, this, SLOT(seek_left_big()) );
+		this->create_shortcut( Qt::Key_Slash, this, SLOT(seek_right_big()) );
 
-		shortcut = new QShortcut(Qt::Key_J, this);
-		connect(shortcut, SIGNAL(activated()), ui->player, SLOT(next_track()));
-
-		shortcut = new QShortcut(Qt::Key_K, this);
-		connect(shortcut, SIGNAL(activated()), ui->player, SLOT(previous_track()));
-	}
+		this->create_shortcut( Qt::Key_J, ui->player, SLOT(next_track()) );
+		this->create_shortcut( Qt::Key_K, ui->player, SLOT(previous_track()) );
 	// Setting up shortcuts <--
 }
 
@@ -55,6 +55,55 @@ Main_window::Main_window(QWidget *parent)
 
 Main_window::~Main_window()
 {
+}
+
+
+
+void Main_window::create_shortcut(const QKeySequence& key, QObject* target, const char* slot)
+{
+	connect(new QShortcut(key, this), SIGNAL(activated()), target, slot);
+}
+
+
+
+void Main_window::seek_left_big(void)
+{
+	ui->player->seek(-config::big_seek_size);
+}
+
+
+
+void Main_window::seek_left_ordinary(void)
+{
+	ui->player->seek(-config::ordinary_seek_size);
+}
+
+
+
+void Main_window::seek_left_small(void)
+{
+	ui->player->seek(-config::small_seek_size);
+}
+
+
+
+void Main_window::seek_right_big(void)
+{
+	ui->player->seek(config::big_seek_size);
+}
+
+
+
+void Main_window::seek_right_ordinary(void)
+{
+	ui->player->seek(config::ordinary_seek_size);
+}
+
+
+
+void Main_window::seek_right_small(void)
+{
+	ui->player->seek(config::small_seek_size);
 }
 
 

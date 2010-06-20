@@ -54,5 +54,22 @@
 ///// Application's translations' directory (relative to install prefix).
 //#define MLPLAYER_APP_TRANSLATIONS_DIR "@APP_TRANSLATIONS_DIR@"
 
+
+// Application configuration values.
+namespace mlplayer { namespace config {
+
+
+	/// Jump size on a small seek (in seconds).
+	static const int	small_seek_size		= 3;
+
+	/// Jump size on a ordinary seek (in seconds).
+	static const int	ordinary_seek_size	= 10;
+
+	/// Jump size on a big seek (in seconds).
+	static const int	big_seek_size		= 30;
+
+
+}}
+
 #endif
 

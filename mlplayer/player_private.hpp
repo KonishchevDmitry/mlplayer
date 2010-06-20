@@ -18,8 +18,8 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_PLAYER_PRIVATE
-#define MLPLAYER_PLAYER_PRIVATE
+#ifndef MLPLAYER_HEADER_PLAYER_PRIVATE
+#define MLPLAYER_HEADER_PLAYER_PRIVATE
 
 class QWidget;
 

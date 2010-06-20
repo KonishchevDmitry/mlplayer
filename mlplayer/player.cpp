@@ -44,9 +44,14 @@ namespace Player_aux {
 		audio( new Phonon::AudioOutput(Phonon::VideoCategory, this) ),
 		widget( new Phonon::VideoWidget(parent) )
 	{
+		this->object->setCurrentSource(file_path);
+
+		// We need to get the paused state on the object to unable seeking on it.
+		this->object->play();
+		this->object->pause();
+
 		Phonon::createPath(this->object, this->audio);
 		Phonon::createPath(this->object, this->widget);
-		this->object->setCurrentSource(file_path);
 	}
 
 
@@ -61,12 +66,6 @@ Player::Player(QWidget *parent)
 {
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi");
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.s01e16.rus.LostFilm.TV.avi");
-}
-
-
-
-Player::~Player(void)
-{
 }
 
 
@@ -108,6 +107,15 @@ void Player::play(void)
 
 	MLIB_D("Playing current video...");
 	this->current_video->object->play();
+}
+
+
+void Player::play_pause(void)
+{
+	if(this->playing())
+		this->pause();
+	else
+		this->play();
 }
 
 
@@ -167,6 +175,19 @@ void Player::roll_tracks(ssize_t direction)
 
 
 
+void Player::seek(int seconds)
+{
+	if(this->state != WORKING)
+		return;
+
+	MLIB_D("Seeking for %1 seconds...", seconds);
+
+	this->current_video->object->seek(
+		this->current_video->object->currentTime() + Time(seconds) * 1000 );
+}
+
+
+
 void Player::set_current_video(size_t id)
 {
 	this->current_video_id = id;
@@ -204,7 +225,7 @@ void Player::video_source_state_changed(void)
 
 		Q_FOREACH(Video* video, this->videos)
 		{
-			if(video->object->state() != Phonon::StoppedState)
+			if(video->object->state() != Phonon::PausedState)
 			{
 				all_is_ready = false;
 				break;
