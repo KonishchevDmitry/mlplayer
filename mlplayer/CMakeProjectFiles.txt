@@ -2,16 +2,19 @@ set(MLPLAYER_SOURCES
 	main.cpp
 	main_window.cpp
 	player.cpp
+	player/video.cpp
 	subtitles.cpp
 	subtitles_view.cpp
+	subtitles_viewport.cpp
 )
 
 set(MLPLAYER_MOC_SOURCES
 	main_window.hpp
 	player.hpp
-	player_private.hpp
+	player/video.hpp
 	subtitles.hpp
 	subtitles_view.hpp
+	subtitles_viewport.hpp
 )
 
 set(MLPLAYER_TRANSLATIONS

@@ -18,53 +18,58 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES
-#define MLPLAYER_HEADER_SUBTITLES
+#ifndef MLPLAYER_HEADER_PLAYER_VIDEO
+#define MLPLAYER_HEADER_PLAYER_VIDEO
 
-class QTextStream;
+class QWidget;
+
+namespace Phonon {
+	class AudioOutput;
+	class MediaObject;
+	class VideoWidget;
+}
 
 #include <mlplayer/common.hpp>
 
 
-namespace mlplayer {
+namespace mlplayer { namespace player {
 
 
-/// Represents a single subtitle.
-class Subtitle
-{
-	public:
-		Subtitle(void);
-
-
-	public:
-		/// Subtitle start time.
-		Time_ms	start_time;
-
-		/// Subtitle end time.
-		Time_ms end_time;
-
-		/// Subtitle text.
-		QString	text;
-};
-
-
-/// Parses a file with subtitles.
-class Subtitles_parser: public QObject
+/// Video that a Player will play.
+class Video: public QObject
 {
 	Q_OBJECT
 
 	public:
-		/// Parses a file \a path and returns a list of Subtitle objects.
-		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path) const;
+		Video(const QString& file_path, QWidget* parent = NULL);
+
+
+	public:
+		/// Represents our video as an object.
+		Phonon::MediaObject* const	object;
+
+		/// Sends data to output devices.
+		Phonon::AudioOutput* const	audio;
+
+		/// Renders our video.
+		Phonon::VideoWidget* const	widget;
 
 	private:
-		/// Reads subtitles from a stream;
-		/// @throw m::Exception.
-		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
+		/// Current playing position on video.
+		Time_ms	cur_pos;
+
+
+	signals:
+		/// Emitted when current playing position on video changes.
+		void	pos_changed(Time_ms time);
+
+
+	private slots:
+		/// MediaObject's tick signal handler.
+		void	tick(qint64 time);
 };
 
 
-}
+}}
 
 #endif

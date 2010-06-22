@@ -18,45 +18,52 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_PLAYER_PRIVATE
-#define MLPLAYER_HEADER_PLAYER_PRIVATE
-
-class QWidget;
-
-namespace Phonon {
-	class AudioOutput;
-	class MediaObject;
-	class VideoWidget;
-}
+#include <Phonon/AudioOutput>
+#include <Phonon/MediaObject>
+#include <Phonon/MediaSource>
+#include <Phonon/VideoWidget>
 
 #include <mlplayer/common.hpp>
 
+#include "video.hpp"
 
-namespace mlplayer { namespace Player_aux {
+
+namespace mlplayer { namespace player {
 
 
-/// Video that a Player will play.
-class Video: public QObject
+Video::Video(const QString& file_path, QWidget* parent)
+:
+	QObject(parent),
+	object( new Phonon::MediaObject(this) ),
+	audio( new Phonon::AudioOutput(Phonon::VideoCategory, this) ),
+	widget( new Phonon::VideoWidget(parent) ),
+	cur_pos(0)
 {
-	Q_OBJECT
+	this->object->setCurrentSource(file_path);
+// TODO
+	this->object->setTickInterval(200);
 
-	public:
-		Video(const QString& file_path, QWidget* parent = NULL);
+	connect(this->object, SIGNAL(tick(qint64)),
+		this, SLOT(tick(qint64)) );
+
+	// We need to get the paused state on the object to unable seeking on it.
+	this->object->play();
+	this->object->pause();
+
+	Phonon::createPath(this->object, this->audio);
+	Phonon::createPath(this->object, this->widget);
+}
 
 
-	public:
-		/// Represents our video as an object.
-		Phonon::MediaObject* const	object;
 
-		/// Sends data to output devices.
-		Phonon::AudioOutput* const	audio;
-
-		/// Renders our video.
-		Phonon::VideoWidget* const	widget;
-
-};
+void Video::tick(qint64 time)
+{
+	if(this->cur_pos != time)
+	{
+		this->cur_pos = time;
+		emit this->pos_changed(this->cur_pos);
+	}
+}
 
 
 }}
-
-#endif

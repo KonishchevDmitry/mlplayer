@@ -18,53 +18,40 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES
-#define MLPLAYER_HEADER_SUBTITLES
-
-class QTextStream;
+#include <QtGui/QHBoxLayout>
 
 #include <mlplayer/common.hpp>
+#include <mlplayer/subtitles_view.hpp>
+
+#include "subtitles_viewport.hpp"
 
 
 namespace mlplayer {
 
 
-/// Represents a single subtitle.
-class Subtitle
+Subtitles_viewport::Subtitles_viewport(QWidget *parent)
+:
+	QWidget(parent),
+	layout(new QHBoxLayout(this))
 {
-	public:
-		Subtitle(void);
+	// TODO
+	this->add("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.srt");
+	this->add("/my_files/programs/mlplayer.build/FlashForward - 1x16 - Season 1  Episode 16.HDTV.ru.srt");
+}
 
 
-	public:
-		/// Subtitle start time.
-		Time_ms	start_time;
 
-		/// Subtitle end time.
-		Time_ms end_time;
-
-		/// Subtitle text.
-		QString	text;
-};
-
-
-/// Parses a file with subtitles.
-class Subtitles_parser: public QObject
+void Subtitles_viewport::add(const QString& path)
 {
-	Q_OBJECT
+	// Throws m::Exception
+	Subtitles_view* view = new Subtitles_view(path, this);
+	this->views << view;
 
-	public:
-		/// Parses a file \a path and returns a list of Subtitle objects.
-		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path) const;
-
-	private:
-		/// Reads subtitles from a stream;
-		/// @throw m::Exception.
-		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
-};
+	this->layout->addWidget(view);
+	connect(this, SIGNAL(set_time(Time_ms)),
+		view, SLOT(set_time(Time_ms)) );
+	view->show();
+}
 
 
 }
-
-#endif

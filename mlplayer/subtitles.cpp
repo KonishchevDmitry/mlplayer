@@ -31,7 +31,7 @@
 namespace mlplayer {
 
 
-Subtitles::Subtitle::Subtitle(void)
+Subtitle::Subtitle(void)
 :
 	start_time(0),
 	end_time(0)
@@ -40,9 +40,9 @@ Subtitles::Subtitle::Subtitle(void)
 
 
 
-Subtitles::Subtitles(const QString& path)
+QList<Subtitle> Subtitles_parser::get(const QString& path) const
 {
-	MLIB_D("Reading subtitles %1...", path);
+	MLIB_D("Reading subtitles from '%1'...", path);
 
 	QFile file(path);
 
@@ -57,7 +57,7 @@ Subtitles::Subtitles(const QString& path)
 	try
 	{
 		QTextStream in(&file);
-		this->parse(file.fileName(), &in);
+		return this->parse(file.fileName(), &in);
 	}
 	catch(m::Exception& e)
 	{
@@ -70,7 +70,7 @@ Subtitles::Subtitles(const QString& path)
 
 
 
-void Subtitles::parse(const QString& source_path, QTextStream* stream)
+QList<Subtitle> Subtitles_parser::parse(const QString& source_path, QTextStream* stream) const
 {
 	enum {
 		// Reading ID of a subtitle.
@@ -84,6 +84,7 @@ void Subtitles::parse(const QString& source_path, QTextStream* stream)
 	} state = READING_ID;
 
 	Subtitle subtitle;
+	QList<Subtitle> subtitles;
 	size_t line_num = 0;
 	size_t last_id = 0;
 
@@ -103,26 +104,26 @@ void Subtitles::parse(const QString& source_path, QTextStream* stream)
         {
         	case READING_ID:
         	{
-        		if(line.isEmpty())
-        			continue;
+        		if(!at_end && !line.isEmpty())
+        		{
+					if(id_regexp.indexIn(line) == -1)
+						M_THROW(tr("Invalid subtitle id '%1' at line %2."), line, line_num);
 
-        		if(id_regexp.indexIn(line) == -1)
-        			M_THROW(tr("Invalid subtitle id '%1' at line %2."), line, line_num);
+					size_t id = id_regexp.cap(1).toUInt();
+					MLIB_DV("ID: %1.", id);
 
-				size_t id = id_regexp.cap(1).toUInt();
-				MLIB_DV("ID: %1.", id);
+					if(id < last_id)
+					{
+						MLIB_SW(_F(
+							tr("Subtitles file '%1' at line %2: invalid subtitle id %3 - previous subtitle id was %4."),
+							source_path, line_num, id, last_id
+						));
+					}
+					last_id = id;
 
-				if(id < last_id)
-				{
-					MLIB_SW(_F(
-						tr("Subtitles file '%1' at line %2: invalid subtitle id %3 - previous subtitle id was %4."),
-						source_path, line_num, id, last_id
-					));
-				}
-				last_id = id;
-
-				state = READING_TIMINGS;
-				subtitle.text.clear();
+					state = READING_TIMINGS;
+					subtitle.text.clear();
+        		}
         	}
         	break;
 
@@ -168,7 +169,7 @@ void Subtitles::parse(const QString& source_path, QTextStream* stream)
         			else
         			{
         				MLIB_D("Text: %1", subtitle.text);
-        				this->subtitles << subtitle;
+        				subtitles << subtitle;
         			}
 
         			state = READING_ID;
@@ -192,8 +193,10 @@ void Subtitles::parse(const QString& source_path, QTextStream* stream)
         	break;
     }
 
-    if(this->subtitles.empty())
+    if(subtitles.empty())
     	M_THROW(tr("File is empty."));
+
+    return subtitles;
 }
 
 

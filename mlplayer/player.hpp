@@ -25,12 +25,10 @@ class QStackedLayout;
 #include <QtGui/QWidget>
 
 #include <mlplayer/common.hpp>
+#include <mlplayer/player/video.hxx>
 
 
 namespace mlplayer {
-
-
-namespace Player_aux { class Video; }
 
 
 /// Widget that plays video files on several languages.
@@ -39,7 +37,7 @@ class Player: public QWidget
 	Q_OBJECT
 
 	private:
-		typedef Player_aux::Video Video;
+		typedef player::Video Video;
 
 		/// Describes player's current state.
 		enum State {
@@ -90,6 +88,11 @@ class Player: public QWidget
 
 		/// Sets current video to video whith id == \a id.
 		void	set_current_video(size_t id);
+
+
+	signals:
+		/// Emitted when master stream playing position changes.
+		void	master_pos_changed(Time_ms time);
 
 
 	public slots:

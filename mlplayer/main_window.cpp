@@ -49,6 +49,9 @@ Main_window::Main_window(QWidget *parent)
 		this->create_shortcut( Qt::Key_J, ui->player, SLOT(next_track()) );
 		this->create_shortcut( Qt::Key_K, ui->player, SLOT(previous_track()) );
 	// Setting up shortcuts <--
+
+	connect(ui->player, SIGNAL(master_pos_changed(Time_ms)),
+		ui->subtitles, SIGNAL(set_time(Time_ms)) );
 }
 
 

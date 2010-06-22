@@ -17,45 +17,20 @@
 *                                                                         *
 **************************************************************************/
 
+
 #include <QtGui/QStackedLayout>
 
-#include <Phonon/AudioOutput>
 #include <Phonon/MediaObject>
 #include <Phonon/MediaSource>
-#include <Phonon/VideoPlayer>
 #include <Phonon/VideoWidget>
 
 #include <mlplayer/common.hpp>
+#include <mlplayer/player/video.hpp>
 
 #include "player.hpp"
-#include "player_private.hpp"
 
 
 namespace mlplayer {
-
-
-namespace Player_aux {
-
-
-	Video::Video(const QString& file_path, QWidget* parent)
-	:
-		QObject(parent),
-		object( new Phonon::MediaObject(this) ),
-		audio( new Phonon::AudioOutput(Phonon::VideoCategory, this) ),
-		widget( new Phonon::VideoWidget(parent) )
-	{
-		this->object->setCurrentSource(file_path);
-
-		// We need to get the paused state on the object to unable seeking on it.
-		this->object->play();
-		this->object->pause();
-
-		Phonon::createPath(this->object, this->audio);
-		Phonon::createPath(this->object, this->widget);
-	}
-
-
-}
 
 
 Player::Player(QWidget *parent)
@@ -73,11 +48,17 @@ Player::Player(QWidget *parent)
 void Player::add_video(const QString& file_path)
 {
 	Video* video = new Video(file_path, this);
+	this->videos << video;
+
 	connect(video->object, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
 		this, SLOT(video_source_state_changed()) );
+
+	if(this->videos.size() - 1 == this->master_video_id)
+		connect(video, SIGNAL(pos_changed(Time_ms)),
+			this, SIGNAL(master_pos_changed(Time_ms)) );
+
 	this->video_layout->addWidget(video->widget);
 	video->widget->show();
-	this->videos << video;
 }
 
 

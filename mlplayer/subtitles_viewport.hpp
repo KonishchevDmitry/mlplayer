@@ -18,50 +18,45 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES
-#define MLPLAYER_HEADER_SUBTITLES
+#ifndef MLPLAYER_HEADER_SUBTITLES_VIEWPORT
+#define MLPLAYER_HEADER_SUBTITLES_VIEWPORT
 
-class QTextStream;
+class QHBoxLayout;
+#include <QtGui/QWidget>
 
 #include <mlplayer/common.hpp>
+#include <mlplayer/subtitles_view.hxx>
 
 
 namespace mlplayer {
 
 
-/// Represents a single subtitle.
-class Subtitle
-{
-	public:
-		Subtitle(void);
-
-
-	public:
-		/// Subtitle start time.
-		Time_ms	start_time;
-
-		/// Subtitle end time.
-		Time_ms end_time;
-
-		/// Subtitle text.
-		QString	text;
-};
-
-
-/// Parses a file with subtitles.
-class Subtitles_parser: public QObject
+/// Widget that displays several subtitles for a video.
+class Subtitles_viewport: public QWidget
 {
 	Q_OBJECT
 
 	public:
-		/// Parses a file \a path and returns a list of Subtitle objects.
-		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path) const;
+		Subtitles_viewport(QWidget* parent = 0);
+
 
 	private:
-		/// Reads subtitles from a stream;
+		/// Widget's layout.
+		QHBoxLayout*			layout;
+
+		/// Widgets that displays subtitles.
+		QList<Subtitles_view*>	views;
+
+
+	public:
+		/// Adds subtitles to view.
 		/// @throw m::Exception.
-		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
+		void	add(const QString& path);
+
+
+	signals:
+		/// Sets time for which we need to display subtitles.
+		void	set_time(Time_ms time);
 };
 
 
