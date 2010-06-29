@@ -52,6 +52,9 @@ Main_window::Main_window(QWidget *parent)
 
 	connect(ui->player, SIGNAL(master_pos_changed(Time_ms)),
 		ui->subtitles, SIGNAL(set_time(Time_ms)) );
+
+	connect(ui->subtitles, SIGNAL(current_subtitle_changed(const QString&)),
+		this, SLOT(current_subtitle_changed(const QString&)) );
 }
 
 
@@ -65,6 +68,13 @@ Main_window::~Main_window()
 void Main_window::create_shortcut(const QKeySequence& key, QObject* target, const char* slot)
 {
 	connect(new QShortcut(key, this), SIGNAL(activated()), target, slot);
+}
+
+
+
+void Main_window::current_subtitle_changed(const QString& text)
+{
+	ui->current_subtitle_text->setText(QString(text).replace('\n', ' '));
 }
 
 

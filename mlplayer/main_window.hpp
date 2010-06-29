@@ -57,6 +57,9 @@ class Main_window: public QMainWindow
 
 
 	private slots:
+		/// Called when current subtitle changes.
+		void	current_subtitle_changed(const QString& text);
+
 		/// Seeks video from current position by the big jump.
 		void	seek_left_big(void);
 

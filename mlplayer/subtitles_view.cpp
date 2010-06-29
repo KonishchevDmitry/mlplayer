@@ -124,6 +124,10 @@ void Subtitles_view::set_active_subtitle(int id)
 	if(id >= 0)
 		this->set_subtitle_format(id, this->char_format_active);
 
+	// TODO: remove formatting
+	emit this->current_subtitle_changed(
+		id >=0 ? this->subtitles.at(id).text : QString() );
+
 	this->cur_subtitle = id;
 	this->scroll_to_active();
 }

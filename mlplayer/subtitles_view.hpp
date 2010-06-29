@@ -64,10 +64,6 @@ class Subtitles_view: public QTextEdit
 		QTextCharFormat	char_format_active;
 
 
-	public slots:
-		/// Sets time for which we need to display subtitles.
-		void	set_time(Time_ms time);
-
 	private:
 		/// See QWidget::event() for details.
 		bool	event(QEvent* event);
@@ -80,6 +76,16 @@ class Subtitles_view: public QTextEdit
 
 		/// Sets format for text of subtitle \a id.
 		void	set_subtitle_format(int id, const QTextCharFormat& format);
+
+
+	signals:
+		/// Emitted when current subtitle changes.
+		void	current_subtitle_changed(const QString& text);
+
+
+	public slots:
+		/// Sets time for which we need to display subtitles.
+		void	set_time(Time_ms time);
 };
 
 

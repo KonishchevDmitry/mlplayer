@@ -55,6 +55,9 @@ class Subtitles_viewport: public QWidget
 
 
 	signals:
+		/// Emitted when current subtitle changes.
+		void	current_subtitle_changed(const QString& text);
+
 		/// Sets time for which we need to display subtitles.
 		void	set_time(Time_ms time);
 };

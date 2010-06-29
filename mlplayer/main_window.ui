@@ -19,6 +19,21 @@
      <widget class="mlplayer::Player" name="player" native="true"/>
     </item>
     <item>
+     <widget class="QLabel" name="current_subtitle_text">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="mlplayer::Subtitles_viewport" name="subtitles" native="true"/>
     </item>
    </layout>

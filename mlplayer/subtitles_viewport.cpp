@@ -48,8 +48,15 @@ void Subtitles_viewport::add(const QString& path)
 	this->views << view;
 
 	this->layout->addWidget(view);
+
 	connect(this, SIGNAL(set_time(Time_ms)),
 		view, SLOT(set_time(Time_ms)) );
+
+	// Watching for original language subtitles
+	if(this->views.size() == 1)
+		connect(view, SIGNAL(current_subtitle_changed(const QString&)),
+			this, SIGNAL(current_subtitle_changed(const QString&)) );
+
 	view->show();
 }
 
