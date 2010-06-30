@@ -17,6 +17,8 @@
 *                                                                         *
 **************************************************************************/
 
+#include <boost/foreach.hpp>
+
 #include <QtGui/QKeySequence>
 #include <QtGui/QShortcut>
 
@@ -53,6 +55,9 @@ Main_window::Main_window(QWidget *parent)
 	connect(ui->player, SIGNAL(master_pos_changed(Time_ms)),
 		ui->subtitles, SIGNAL(set_time(Time_ms)) );
 
+	connect(ui->player, SIGNAL(cur_pos_changed(Time_ms, Time_ms)),
+		this, SLOT(current_video_position_changed(Time_ms, Time_ms)) );
+
 	connect(ui->subtitles, SIGNAL(current_subtitle_changed(const QString&)),
 		this, SLOT(current_subtitle_changed(const QString&)) );
 }
@@ -75,6 +80,34 @@ void Main_window::create_shortcut(const QKeySequence& key, QObject* target, cons
 void Main_window::current_subtitle_changed(const QString& text)
 {
 	ui->current_subtitle_text->setText(QString(text).replace('\n', ' '));
+}
+
+
+
+void Main_window::current_video_position_changed(Time_ms cur_time, Time_ms total_time)
+{
+	cur_time /= 1000;
+	total_time /= 1000;
+
+	const Time minute = 60;
+	const Time hour = 60 * minute;
+	bool show_hours = ( cur_time >= hour || total_time >= hour ? true : false );
+
+	QString time_string;
+	Time times[] = { cur_time, total_time };
+
+	BOOST_FOREACH(Time time, times)
+	{
+		if(!time_string.isEmpty())
+			time_string += '/';
+
+		if(show_hours)
+			time_string += QString().sprintf("%02lld:", time / hour);
+
+		time_string += QString().sprintf("%02lld:%02lld", time / minute % hour, time % minute);
+	}
+
+	ui->time->setText(time_string);
 }
 
 

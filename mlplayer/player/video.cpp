@@ -37,11 +37,15 @@ Video::Video(const QString& file_path, QWidget* parent)
 	object( new Phonon::MediaObject(this) ),
 	audio( new Phonon::AudioOutput(Phonon::VideoCategory, this) ),
 	widget( new Phonon::VideoWidget(parent) ),
-	cur_pos(0)
+	cur_pos(0),
+	total_time(0)
 {
 	this->object->setCurrentSource(file_path);
 // TODO
 	this->object->setTickInterval(200);
+
+	connect(this->object, SIGNAL(totalTimeChanged(qint64)),
+		this, SLOT(total_time_changed(qint64)) );
 
 	connect(this->object, SIGNAL(tick(qint64)),
 		this, SLOT(tick(qint64)) );
@@ -56,12 +60,34 @@ Video::Video(const QString& file_path, QWidget* parent)
 
 
 
+Time_ms Video::get_cur_pos(void)
+{
+	return this->cur_pos;
+}
+
+
+
+Time_ms Video::get_total_time(void)
+{
+	return this->total_time;
+}
+
+
+
+void Video::total_time_changed(qint64 total_time)
+{
+	this->total_time = total_time;
+	emit this->pos_changed(this->cur_pos, this->total_time);
+}
+
+
+
 void Video::tick(qint64 time)
 {
 	if(this->cur_pos != time)
 	{
 		this->cur_pos = time;
-		emit this->pos_changed(this->cur_pos);
+		emit this->pos_changed(this->cur_pos, this->total_time);
 	}
 }
 

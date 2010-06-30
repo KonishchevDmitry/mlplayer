@@ -55,16 +55,30 @@ class Video: public QObject
 		Phonon::VideoWidget* const	widget;
 
 	private:
-		/// Current playing position on video.
+		/// Current playing position of the video.
 		Time_ms	cur_pos;
+
+		/// Length of the video.
+		Time_ms total_time;
+
+
+	public:
+		/// Returns current playing position of the video.
+		Time_ms	get_cur_pos(void);
+
+		/// Returns the length of the video.
+		Time_ms	get_total_time(void);
 
 
 	signals:
 		/// Emitted when current playing position on video changes.
-		void	pos_changed(Time_ms time);
+		void	pos_changed(Time_ms cur_time, Time_ms total_time);
 
 
 	private slots:
+		/// Called when video's total time changes.
+		void	total_time_changed(qint64 total_time);
+
 		/// MediaObject's tick signal handler.
 		void	tick(qint64 time);
 };

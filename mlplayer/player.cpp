@@ -37,6 +37,8 @@ Player::Player(QWidget *parent)
 :
 	QWidget(parent),
 	state(LOADING),
+	current_video(NULL),
+	current_video_id(-1),
 	video_layout(new QStackedLayout(this))
 {
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi");
@@ -53,12 +55,18 @@ void Player::add_video(const QString& file_path)
 	connect(video->object, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
 		this, SLOT(video_source_state_changed()) );
 
+	connect(video, SIGNAL(pos_changed(Time_ms, Time_ms)),
+		this, SLOT(video_pos_changed(Time_ms, Time_ms)) );
+
 	if(this->videos.size() - 1 == this->master_video_id)
-		connect(video, SIGNAL(pos_changed(Time_ms)),
+		connect(video, SIGNAL(pos_changed(Time_ms, Time_ms)),
 			this, SIGNAL(master_pos_changed(Time_ms)) );
 
 	this->video_layout->addWidget(video->widget);
 	video->widget->show();
+
+	if(!this->current_video)
+		this->set_current_video(this->master_video_id);
 }
 
 
@@ -177,6 +185,19 @@ void Player::set_current_video(size_t id)
 	MLIB_D("Setting current video to the '%1'...",
 		this->current_video->object->currentSource().fileName() );
 	this->video_layout->setCurrentIndex(id);
+
+	emit this->cur_pos_changed(
+		this->current_video->get_cur_pos(),
+		this->current_video->get_total_time()
+	);
+}
+
+
+
+void Player::video_pos_changed(Time_ms cur_time, Time_ms total_time)
+{
+	if(this->sender() == this->current_video)
+		emit this->cur_pos_changed(cur_time, total_time);
 }
 
 

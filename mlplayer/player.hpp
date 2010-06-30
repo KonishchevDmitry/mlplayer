@@ -91,7 +91,10 @@ class Player: public QWidget
 
 
 	signals:
-		/// Emitted when master stream playing position changes.
+		/// Emitted when current stream's playing position changes.
+		void	cur_pos_changed(Time_ms cur_time, Time_ms total_time);
+
+		/// Emitted when master stream's playing position changes.
 		void	master_pos_changed(Time_ms time);
 
 
@@ -115,7 +118,10 @@ class Player: public QWidget
 		void	seek(int seconds);
 
 	private slots:
-		/// Called when video source state changes.
+		/// Called when video's current playing position changes.
+		void	video_pos_changed(Time_ms cur_time, Time_ms total_time);
+
+		/// Called when video source's state changes.
 		void	video_source_state_changed(void);
 };
 

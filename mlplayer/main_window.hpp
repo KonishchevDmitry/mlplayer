@@ -60,6 +60,9 @@ class Main_window: public QMainWindow
 		/// Called when current subtitle changes.
 		void	current_subtitle_changed(const QString& text);
 
+		/// Called when current video's playing position changes.
+		void	current_video_position_changed(Time_ms cur_time, Time_ms total_time);
+
 		/// Seeks video from current position by the big jump.
 		void	seek_left_big(void);
 
