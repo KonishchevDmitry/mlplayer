@@ -18,8 +18,8 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES_FWD
-#define MLPLAYER_HEADER_SUBTITLES_FWD
+#ifndef MLPLAYER_HEADER_SUBTITLES_VIEW_FWD
+#define MLPLAYER_HEADER_SUBTITLES_VIEW_FWD
 
 namespace mlplayer {
 	class Subtitles_view;

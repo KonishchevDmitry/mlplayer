@@ -43,6 +43,7 @@ Player::Player(QWidget *parent)
 {
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi");
 	this->add_video("/my_files/programs/mlplayer.build/FlashForward.s01e16.rus.LostFilm.TV.avi");
+	this->add_video("/my_files/programs/mlplayer.build/flashforward.s01e16.web-dlrip.rus.eng.novafilm.tv.avi");
 }
 
 
