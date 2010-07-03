@@ -39,7 +39,7 @@ class Subtitles_view: public QTextEdit
 
 	public:
 		/// @throw m::Exception.
-		Subtitles_view(const QString& path, QWidget* parent = 0);
+		Subtitles_view(const QString& path, const QString& language, QWidget* parent = 0);
 
 
 	private:

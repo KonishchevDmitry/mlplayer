@@ -21,6 +21,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QIODevice>
 #include <QtCore/QRegExp>
+#include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 
 #include <mlplayer/common.hpp>
@@ -40,7 +41,48 @@ Subtitle::Subtitle(void)
 
 
 
-QList<Subtitle> Subtitles_parser::get(const QString& path) const
+QByteArray Subtitles_parser::find_codec_for(const QByteArray& data, const QString& language) const
+{
+	MLIB_D("Finding suitable text codec...");
+
+	QByteArray best_codec = QTextCodec::codecForLocale()->name();
+	QList<const char*> language_codecs;
+
+	if(language == "ru")
+	{
+		language_codecs << "Windows-1251";
+		language_codecs << "KOI8-R";
+	}
+
+	Q_FOREACH(const char* codec_name, language_codecs)
+	{
+		MLIB_D("Trying %1...", codec_name);
+
+		QTextCodec* codec = QTextCodec::codecForName(codec_name);
+
+		if(!codec)
+		{
+			MLIB_SW(tr("Unable to load text codec %1."), codec_name);
+			continue;
+		}
+
+		QTextCodec::ConverterState state;
+		codec->toUnicode(data.data(), data.size(), &state);
+
+		if(!state.invalidChars)
+		{
+			best_codec = codec_name;
+			break;
+		}
+	}
+
+	MLIB_D("Using text codec %1.", best_codec);
+	return best_codec;
+}
+
+
+
+QList<Subtitle> Subtitles_parser::get(const QString& path, const QString& language) const
 {
 	MLIB_D("Reading subtitles from '%1'...", path);
 
@@ -54,10 +96,13 @@ QList<Subtitle> Subtitles_parser::get(const QString& path) const
 		));
 	}
 
+	QByteArray data = file.readAll();
+	QTextStream stream(&data);
+	stream.setCodec(this->find_codec_for(data, language));
+
 	try
 	{
-		QTextStream in(&file);
-		return this->parse(file.fileName(), &in);
+		return this->parse(file.fileName(), &stream);
 	}
 	catch(m::Exception& e)
 	{
@@ -92,20 +137,20 @@ QList<Subtitle> Subtitles_parser::parse(const QString& source_path, QTextStream*
 	QRegExp timings_regexp(
 		"^(\\d{1,2}):(\\d{1,2}):(\\d{1,2}),(\\d{1,3})\\s+-->\\s+(\\d{1,2}):(\\d{1,2}):(\\d{1,2}),(\\d{1,3})$" );
 
-    while(true)
-    {
-    	bool at_end = stream->atEnd();
-        QString line = stream->readLine().trimmed();
+	while(true)
+	{
+		bool at_end = stream->atEnd();
+		QString line = stream->readLine().trimmed();
 
-        if(!at_end)
-        	line_num++;
+		if(!at_end)
+			line_num++;
 
-        switch(state)
-        {
-        	case READING_ID:
-        	{
-        		if(!at_end && !line.isEmpty())
-        		{
+		switch(state)
+		{
+			case READING_ID:
+			{
+				if(!at_end && !line.isEmpty())
+				{
 					if(id_regexp.indexIn(line) == -1)
 						M_THROW(tr("Invalid subtitle id '%1' at line %2."), line, line_num);
 
@@ -123,81 +168,82 @@ QList<Subtitle> Subtitles_parser::parse(const QString& source_path, QTextStream*
 
 					state = READING_TIMINGS;
 					subtitle.text.clear();
-        		}
-        	}
-        	break;
+				}
+			}
+			break;
 
-        	case READING_TIMINGS:
-        	{
-        		if(at_end)
-        			M_THROW(tr("Unexpected end of file."));
+			case READING_TIMINGS:
+			{
+				if(at_end)
+					M_THROW(tr("Unexpected end of file."));
 
-        		if(timings_regexp.indexIn(line) == -1)
-        			M_THROW(tr("Invalid subtitle timings '%1' at line %2."), line, line_num);
+				if(timings_regexp.indexIn(line) == -1)
+					M_THROW(tr("Invalid subtitle timings '%1' at line %2."), line, line_num);
 
-        		subtitle.start_time =
-        		(
-        			+ Time_ms(timings_regexp.cap(1).toInt()) * 60 * 60
-        			+ Time_ms(timings_regexp.cap(2).toInt()) * 60
-        			+ Time_ms(timings_regexp.cap(3).toInt())
-        		) * 1000 + Time_ms(timings_regexp.cap(4).toInt());
+				subtitle.start_time =
+				(
+					+ Time_ms(timings_regexp.cap(1).toInt()) * 60 * 60
+					+ Time_ms(timings_regexp.cap(2).toInt()) * 60
+					+ Time_ms(timings_regexp.cap(3).toInt())
+				) * 1000 + Time_ms(timings_regexp.cap(4).toInt());
 
-        		subtitle.end_time =
-        		(
-        			+ Time_ms(timings_regexp.cap(5).toInt()) * 60 * 60
-        			+ Time_ms(timings_regexp.cap(6).toInt()) * 60
-        			+ Time_ms(timings_regexp.cap(7).toInt())
-        		) * 1000 + Time_ms(timings_regexp.cap(8).toInt());
+				subtitle.end_time =
+				(
+					+ Time_ms(timings_regexp.cap(5).toInt()) * 60 * 60
+					+ Time_ms(timings_regexp.cap(6).toInt()) * 60
+					+ Time_ms(timings_regexp.cap(7).toInt())
+				) * 1000 + Time_ms(timings_regexp.cap(8).toInt());
 
-        		MLIB_DV("Timings: %1 - %2.", subtitle.start_time, subtitle.end_time);
+				MLIB_DV("Timings: %1 - %2.", subtitle.start_time, subtitle.end_time);
 
-        		state = READING_SUBTITLE;
-        	}
-        	break;
+				state = READING_SUBTITLE;
+			}
+			break;
 
-        	case READING_SUBTITLE:
-        	{
-        		if(line.isEmpty())
-        		{
-        			if(subtitle.text.isEmpty())
-        			{
-    					MLIB_SW(_F(
-    						tr("Subtitles file '%1' at line %2: gotten subtitle [%3] with empty text."),
-    						source_path, line_num, last_id
-    					));
-        			}
-        			else
-        			{
-        				MLIB_D("Text: %1", subtitle.text);
-        				subtitles << subtitle;
-        			}
+			case READING_SUBTITLE:
+			{
+				if(line.isEmpty())
+				{
+					if(subtitle.text.isEmpty())
+					{
+						MLIB_SW(_F(
+							tr("Subtitles file '%1' at line %2: gotten subtitle [%3] with empty text."),
+							source_path, line_num, last_id
+						));
+					}
+					else
+					{
+						MLIB_DV("Text: %1", subtitle.text);
+						subtitles << subtitle;
+					}
 
-        			state = READING_ID;
-        		}
-        		else
-        		{
-        			if(!subtitle.text.isEmpty())
-        				subtitle.text += "\n";
+					state = READING_ID;
+				}
+				else
+				{
+					if(!subtitle.text.isEmpty())
+						subtitle.text += "\n";
 
-        			subtitle.text += line;
-        		}
-        	}
-        	break;
+					subtitle.text += line;
+				}
+			}
+			break;
 
-        	default:
-        		M_THROW(tr("Logical error."));
-        		break;
-        }
+			default:
+				M_THROW(tr("Logical error."));
+				break;
+		}
 
-        if(at_end)
-        	break;
-    }
+		if(at_end)
+			break;
+	}
 
-    if(subtitles.empty())
-    	M_THROW(tr("File is empty."));
+	if(subtitles.empty())
+		M_THROW(tr("File is empty."));
 
-    return subtitles;
+	return subtitles;
 }
 
 
 }
+

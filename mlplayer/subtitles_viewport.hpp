@@ -51,7 +51,7 @@ class Subtitles_viewport: public QWidget
 	public:
 		/// Adds subtitles to view.
 		/// @throw m::Exception.
-		void	add(const QString& path);
+		void	add(const QString& path, const QString& language = "");
 
 
 	signals:

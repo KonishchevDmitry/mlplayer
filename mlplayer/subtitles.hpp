@@ -55,10 +55,15 @@ class Subtitles_parser: public QObject
 
 	public:
 		/// Parses a file \a path and returns a list of Subtitle objects.
+		/// @param language - a language of subtitles or an empty string.
 		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path) const;
+		QList<Subtitle>	get(const QString& path, const QString& language) const;
 
 	private:
+		/// Finds a codec suitable for \a data.
+		/// @param language - a language of subtitles or an empty string.
+		QByteArray		find_codec_for(const QByteArray& data, const QString& language) const;
+
 		/// Reads subtitles from a stream;
 		/// @throw m::Exception.
 		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;

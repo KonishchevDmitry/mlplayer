@@ -35,13 +35,13 @@
 namespace mlplayer {
 
 
-Subtitles_view::Subtitles_view(const QString& path, QWidget *parent)
+Subtitles_view::Subtitles_view(const QString& path, const QString& language, QWidget *parent)
 :
 	QTextEdit(parent),
 	been_showed(false),
 	cur_subtitle(-1),
 	// Throws m::Exception
-	subtitles(Subtitles_parser().get(path))
+	subtitles(Subtitles_parser().get(path, language))
 {
 	this->setReadOnly(true);
 	this->document()->setUndoRedoEnabled(false);

@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
 //	m::set_message_handler(m::MESSAGE_TYPE_WARNING, &message_handler);
 //	m::set_message_handler(m::MESSAGE_TYPE_ERROR, &message_handler);
 		m::set_debug_level(m::DEBUG_LEVEL_VERBOSE);
+		m::set_debug_level(m::DEBUG_LEVEL_ENABLED);
 
 	MLIB_D("Starting the application...");
 
