@@ -1,6 +1,7 @@
 /**************************************************************************
 *                                                                         *
-*   MLPlayer - Multi-language video player                                *
+*   medialib - a small collection of classes that may be useful in        *
+*   development of applications that works with media files.              *
 *                                                                         *
 *   Copyright (C) 2010, Dmitry Konishchev                                 *
 *   http://konishchevdmitry.blogspot.com/                                 *
@@ -18,11 +19,58 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES_VIEW_FWD
-#define MLPLAYER_HEADER_SUBTITLES_VIEW_FWD
+#ifndef MEDIALIB_HEADER_SUBTITLES
+#define MEDIALIB_HEADER_SUBTITLES
 
-namespace mlplayer {
-	class Subtitles_view;
+class QTextStream;
+
+#include <mlib/core.hpp>
+
+
+namespace medialib {
+
+
+/// Represents a single subtitle.
+class Subtitle
+{
+	public:
+		Subtitle(void);
+
+
+	public:
+		/// Subtitle start time.
+		Time_ms	start_time;
+
+		/// Subtitle end time.
+		Time_ms end_time;
+
+		/// Subtitle text.
+		QString	text;
+};
+
+
+/// Parses a file with subtitles.
+class Subtitles_parser: public QObject
+{
+	Q_OBJECT
+
+	public:
+		/// Parses a file \a path and returns a list of Subtitle objects.
+		/// @param language - a language of subtitles or an empty string.
+		/// @throw m::Exception.
+		QList<Subtitle>	get(const QString& path, const QString& language) const;
+
+	private:
+		/// Finds a codec suitable for \a data.
+		/// @param language - a language of subtitles or an empty string.
+		QByteArray		find_codec_for(const QByteArray& data, const QString& language) const;
+
+		/// Reads subtitles from a stream;
+		/// @throw m::Exception.
+		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
+};
+
+
 }
 
 #endif

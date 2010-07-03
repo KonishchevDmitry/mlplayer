@@ -25,7 +25,8 @@ class QHBoxLayout;
 #include <QtGui/QWidget>
 
 #include <mlplayer/common.hpp>
-#include <mlplayer/subtitles_view.hxx>
+
+#include "subtitles_viewport/subtitles_view.hxx"
 
 
 namespace mlplayer {
@@ -35,6 +36,10 @@ namespace mlplayer {
 class Subtitles_viewport: public QWidget
 {
 	Q_OBJECT
+
+	private:
+		typedef subtitles_viewport::Subtitles_view Subtitles_view;
+
 
 	public:
 		Subtitles_viewport(QWidget* parent = 0);

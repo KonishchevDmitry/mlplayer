@@ -18,58 +18,11 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES
-#define MLPLAYER_HEADER_SUBTITLES
+#ifndef MLPLAYER_HEADER_SUBTITLES_VIEWPORT_SUBTITLES_VIEW_FWD
+#define MLPLAYER_HEADER_SUBTITLES_VIEWPORT_SUBTITLES_VIEW_FWD
 
-class QTextStream;
-
-#include <mlplayer/common.hpp>
-
-
-namespace mlplayer {
-
-
-/// Represents a single subtitle.
-class Subtitle
-{
-	public:
-		Subtitle(void);
-
-
-	public:
-		/// Subtitle start time.
-		Time_ms	start_time;
-
-		/// Subtitle end time.
-		Time_ms end_time;
-
-		/// Subtitle text.
-		QString	text;
-};
-
-
-/// Parses a file with subtitles.
-class Subtitles_parser: public QObject
-{
-	Q_OBJECT
-
-	public:
-		/// Parses a file \a path and returns a list of Subtitle objects.
-		/// @param language - a language of subtitles or an empty string.
-		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path, const QString& language) const;
-
-	private:
-		/// Finds a codec suitable for \a data.
-		/// @param language - a language of subtitles or an empty string.
-		QByteArray		find_codec_for(const QByteArray& data, const QString& language) const;
-
-		/// Reads subtitles from a stream;
-		/// @throw m::Exception.
-		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
-};
-
-
-}
+namespace mlplayer { namespace subtitles_viewport {
+	class Subtitles_view;
+}}
 
 #endif

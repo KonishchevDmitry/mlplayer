@@ -56,8 +56,13 @@ include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR})
 
 
 # Sub-projects
+add_subdirectory(medialib)
 add_subdirectory(mlib)
 add_subdirectory(${APP_UNIX_NAME})
+
+
+# TODO
+link_directories(${MLIB_DIR}/medialib)
 
 
 # TODO

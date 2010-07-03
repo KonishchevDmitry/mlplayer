@@ -1,6 +1,7 @@
 /**************************************************************************
 *                                                                         *
-*   MLPlayer - Multi-language video player                                *
+*   medialib - a small collection of classes that may be useful in        *
+*   development of applications that works with media files.              *
 *                                                                         *
 *   Copyright (C) 2010, Dmitry Konishchev                                 *
 *   http://konishchevdmitry.blogspot.com/                                 *
@@ -24,12 +25,12 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 
-#include <mlplayer/common.hpp>
+#include <mlib/core.hpp>
 
 #include "subtitles.hpp"
 
 
-namespace mlplayer {
+namespace medialib {
 
 
 Subtitle::Subtitle(void)

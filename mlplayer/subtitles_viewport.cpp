@@ -21,7 +21,8 @@
 #include <QtGui/QHBoxLayout>
 
 #include <mlplayer/common.hpp>
-#include <mlplayer/subtitles_view.hpp>
+
+#include "subtitles_viewport/subtitles_view.hpp"
 
 #include "subtitles_viewport.hpp"
 

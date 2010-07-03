@@ -18,24 +18,29 @@
 **************************************************************************/
 
 
-#ifndef MLPLAYER_HEADER_SUBTITLES_VIEW
-#define MLPLAYER_HEADER_SUBTITLES_VIEW
+#ifndef MLPLAYER_HEADER_SUBTITLES_VIEWPORT_SUBTITLES_VIEW
+#define MLPLAYER_HEADER_SUBTITLES_VIEWPORT_SUBTITLES_VIEW
 
 #include <QtGui/QTextCharFormat>
 #include <QtGui/QTextEdit>
 #include <QtGui/QWidget>
 
+#include <medialib/subtitles.hpp>
+
 #include <mlplayer/common.hpp>
-#include <mlplayer/subtitles.hpp>
 
 
-namespace mlplayer {
+namespace mlplayer { namespace subtitles_viewport {
 
 
 /// Widget that displays subtitles for a video.
 class Subtitles_view: public QTextEdit
 {
 	Q_OBJECT
+
+	private:
+		typedef medialib::Subtitle Subtitle;
+
 
 	public:
 		/// @throw m::Exception.
@@ -89,6 +94,6 @@ class Subtitles_view: public QTextEdit
 };
 
 
-}
+}}
 
 #endif

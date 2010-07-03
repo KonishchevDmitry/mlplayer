@@ -1,0 +1,13 @@
+set(MEDIALIB_SOURCES
+	subtitles.cpp
+)
+
+set(MEDIALIB_MOC_SOURCES
+	subtitles.hpp
+)
+
+set(MEDIALIB_TRANSLATIONS
+)
+
+set(MEDIALIB_UIS
+)

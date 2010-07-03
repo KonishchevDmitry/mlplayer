@@ -26,13 +26,14 @@
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextEdit>
 
+#include <medialib/subtitles.hpp>
+
 #include <mlplayer/common.hpp>
-#include <mlplayer/subtitles.hpp>
 
 #include "subtitles_view.hpp"
 
 
-namespace mlplayer {
+namespace mlplayer { namespace subtitles_viewport {
 
 
 Subtitles_view::Subtitles_view(const QString& path, const QString& language, QWidget *parent)
@@ -41,7 +42,7 @@ Subtitles_view::Subtitles_view(const QString& path, const QString& language, QWi
 	been_showed(false),
 	cur_subtitle(-1),
 	// Throws m::Exception
-	subtitles(Subtitles_parser().get(path, language))
+	subtitles(medialib::Subtitles_parser().get(path, language))
 {
 	this->setReadOnly(true);
 	this->document()->setUndoRedoEnabled(false);
@@ -183,4 +184,4 @@ void Subtitles_view::set_time(Time_ms time)
 }
 
 
-}
+}}
