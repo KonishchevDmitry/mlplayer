@@ -159,6 +159,10 @@ void Player::roll_tracks(ssize_t direction)
 
 		if(now_playing)
 			this->play();
+
+		if(this->current_video_id != this->master_video_id)
+			this->current_video->object->seek(
+				this->videos[this->master_video_id]->get_cur_pos() );
 	}
 }
 
@@ -172,7 +176,7 @@ void Player::seek(int seconds)
 	MLIB_D("Seeking for %1 seconds...", seconds);
 
 	this->current_video->object->seek(
-		this->current_video->object->currentTime() + Time(seconds) * 1000 );
+		this->current_video->object->currentTime() + Time_ms(seconds) * 1000 );
 }
 
 
