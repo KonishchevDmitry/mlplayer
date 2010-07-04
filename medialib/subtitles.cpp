@@ -33,6 +33,15 @@
 namespace medialib {
 
 
+Subtitles_info::Subtitles_info(const QString& path, const QString& language)
+:
+	path(path),
+	language(language)
+{
+}
+
+
+
 Subtitle::Subtitle(void)
 :
 	start_time(0),

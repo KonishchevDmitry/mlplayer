@@ -19,74 +19,14 @@
 **************************************************************************/
 
 
-#ifndef MEDIALIB_HEADER_SUBTITLES
-#define MEDIALIB_HEADER_SUBTITLES
-
-class QTextStream;
-
-#include <mlib/core.hpp>
-
+#ifndef MEDIALIB_HEADER_SUBTITLES_FWD
+#define MEDIALIB_HEADER_SUBTITLES_FWD
 
 namespace medialib {
-
-
-/// Stores info about subtitles file.
-class Subtitles_info
-{
-	public:
-		Subtitles_info(const QString& path, const QString& language = "");
-
-
-	public:
-		/// Path to subtitles file.
-		QString	path;
-
-		/// Subtitles language.
-		QString	language;
-};
-
-
-/// Represents a single subtitle.
-class Subtitle
-{
-	public:
-		Subtitle(void);
-
-
-	public:
-		/// Subtitle start time.
-		Time_ms	start_time;
-
-		/// Subtitle end time.
-		Time_ms end_time;
-
-		/// Subtitle text.
-		QString	text;
-};
-
-
-/// Parses a file with subtitles.
-class Subtitles_parser: public QObject
-{
-	Q_OBJECT
-
-	public:
-		/// Parses a file \a path and returns a list of Subtitle objects.
-		/// @param language - a language of subtitles or an empty string.
-		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path, const QString& language) const;
-
-	private:
-		/// Finds a codec suitable for \a data.
-		/// @param language - a language of subtitles or an empty string.
-		QByteArray		find_codec_for(const QByteArray& data, const QString& language) const;
-
-		/// Reads subtitles from a stream;
-		/// @throw m::Exception.
-		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
-};
-
-
+	class Subtitle;
+	class Subtitles_info;
+	class Subtitles_parser;
 }
 
 #endif
+

@@ -25,6 +25,10 @@
 #include <mlplayer/common.hpp>
 #include <mlplayer/main_window.hpp>
 
+// TODO
+#include <medialib/paths.hpp>
+#include <medialib/subtitles.hpp>
+
 
 int main(int argc, char *argv[])
 {
@@ -54,6 +58,19 @@ int main(int argc, char *argv[])
 		m::set_debug_level(m::DEBUG_LEVEL_ENABLED);
 
 	MLIB_D("Starting the application...");
+
+//	QString master_video_path = "/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi";
+	QString master_video_path = "/my_files/at_free_time/shows/V.2009.S01E08.HDTV.XviD-2HD.avi";
+	QList<QString> videos;
+	QList<medialib::Subtitles_info> subtitles;
+	medialib::get_tv_show_related_media(master_video_path, &videos, &subtitles);
+	Q_FOREACH(const QString& video, videos)
+		MLIB_D("Video: %1", video);
+	Q_FOREACH(const medialib::Subtitles_info& info, subtitles)
+		MLIB_D("Subtitle: %1 %2", info.path, info.language);
+	exit(0);
+
+
 
 Main_window* main_window = new Main_window(NULL);
 main_window->show();

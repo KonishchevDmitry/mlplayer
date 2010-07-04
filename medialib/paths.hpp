@@ -19,72 +19,63 @@
 **************************************************************************/
 
 
-#ifndef MEDIALIB_HEADER_SUBTITLES
-#define MEDIALIB_HEADER_SUBTITLES
-
-class QTextStream;
+#ifndef MEDIALIB_HEADER_PATHS
+#define MEDIALIB_HEADER_PATHS
 
 #include <mlib/core.hpp>
+
+#include <medialib/subtitles.hxx>
 
 
 namespace medialib {
 
 
-/// Stores info about subtitles file.
-class Subtitles_info
+/// Stores information about TV show gotten from its video file path.
+class Tv_show_info
 {
 	public:
-		Subtitles_info(const QString& path, const QString& language = "");
+		Tv_show_info(void);
 
 
 	public:
-		/// Path to subtitles file.
-		QString	path;
+		/// Possible names of a TV show.
+		///
+		/// Sometimes it's too hard to determine TV show name, so we provide a list
+		/// of all possible names.
+		QList<QString>	names;
 
-		/// Subtitles language.
-		QString	language;
+		/// TV show season number.
+		int				season;
+
+		/// Season's episode number.
+		int				episode;
+
+		/// Extra info (releaser name, language, etc).
+		QList<QString>	extra_info;
+
+
+	public:
+		/// Checks whether this object and \a info points to the same TV show
+		/// episode.
+		bool	equals(const Tv_show_info& info) const;
+
+		/// Returns info's string representation.
+		QString	to_string(void) const;
 };
 
 
-/// Represents a single subtitle.
-class Subtitle
-{
-	public:
-		Subtitle(void);
+/// Gets TV show info from path to its video file.
+/// @throw m::Exception.
+Tv_show_info	get_tv_show_info_by_path(const QString& path);
 
+/// Returns a list of subtitles for TV show episode \a path that we can find in
+/// the same directory and a list with \a path followed by other video files
+/// with this episode (possible with different translations).
+/// @throw m::Exception.
+void			get_tv_show_related_media(const QString& path, QList<QString>* videos, QList<Subtitles_info>* subtitles);
 
-	public:
-		/// Subtitle start time.
-		Time_ms	start_time;
-
-		/// Subtitle end time.
-		Time_ms end_time;
-
-		/// Subtitle text.
-		QString	text;
-};
-
-
-/// Parses a file with subtitles.
-class Subtitles_parser: public QObject
-{
-	Q_OBJECT
-
-	public:
-		/// Parses a file \a path and returns a list of Subtitle objects.
-		/// @param language - a language of subtitles or an empty string.
-		/// @throw m::Exception.
-		QList<Subtitle>	get(const QString& path, const QString& language) const;
-
-	private:
-		/// Finds a codec suitable for \a data.
-		/// @param language - a language of subtitles or an empty string.
-		QByteArray		find_codec_for(const QByteArray& data, const QString& language) const;
-
-		/// Reads subtitles from a stream;
-		/// @throw m::Exception.
-		QList<Subtitle>	parse(const QString& source_path, QTextStream* stream) const;
-};
+/// Checks whether path is a video file.
+bool			is_video_file(const QString& path);
 
 
 }
