@@ -59,20 +59,15 @@ int main(int argc, char *argv[])
 
 	MLIB_D("Starting the application...");
 
-//	QString master_video_path = "/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi";
-	QString master_video_path = "/my_files/at_free_time/shows/V.2009.S01E08.HDTV.XviD-2HD.avi";
+	MLIB_A(argc == 2);
+
+	QString master_video_path = argv[1];
+
 	QList<QString> videos;
 	QList<medialib::Subtitles_info> subtitles;
 	medialib::get_tv_show_related_media(master_video_path, &videos, &subtitles);
-	Q_FOREACH(const QString& video, videos)
-		MLIB_D("Video: %1", video);
-	Q_FOREACH(const medialib::Subtitles_info& info, subtitles)
-		MLIB_D("Subtitle: %1 %2", info.path, info.language);
-	exit(0);
 
-
-
-Main_window* main_window = new Main_window(NULL);
+Main_window* main_window = new Main_window(videos, subtitles, NULL);
 main_window->show();
 //media->enqueue("/home/username/music/song.mp3");
 //media->enqueue(":/sounds/endsound.ogg");

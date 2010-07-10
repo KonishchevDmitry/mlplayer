@@ -41,9 +41,6 @@ Player::Player(QWidget *parent)
 	current_video_id(-1),
 	video_layout(new QStackedLayout(this))
 {
-	this->add_video("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.avi");
-	this->add_video("/my_files/programs/mlplayer.build/FlashForward.s01e16.rus.LostFilm.TV.avi");
-	this->add_video("/my_files/programs/mlplayer.build/flashforward.s01e16.web-dlrip.rus.eng.novafilm.tv.avi");
 }
 
 
@@ -68,6 +65,14 @@ void Player::add_video(const QString& file_path)
 
 	if(!this->current_video)
 		this->set_current_video(this->master_video_id);
+}
+
+
+
+void Player::init(const QList<QString>& paths)
+{
+	Q_FOREACH(const QString& path, paths)
+		this->add_video(path);
 }
 
 

@@ -22,6 +22,8 @@
 #include <QtGui/QKeySequence>
 #include <QtGui/QShortcut>
 
+#include <medialib/subtitles.hpp>
+
 #include <mlplayer/common.hpp>
 
 #include "main_window.hpp"
@@ -31,7 +33,7 @@
 namespace mlplayer {
 
 
-Main_window::Main_window(QWidget *parent)
+Main_window::Main_window(const QList<QString>& videos, const QList<Subtitles_info>& subtitles, QWidget *parent)
 :
 	QMainWindow(parent),
 	ui(new Ui::Main_window)
@@ -60,6 +62,12 @@ Main_window::Main_window(QWidget *parent)
 
 	connect(ui->subtitles, SIGNAL(current_subtitle_changed(const QString&)),
 		this, SLOT(current_subtitle_changed(const QString&)) );
+
+	ui->player->init(videos);
+
+	// TODO: throws
+	Q_FOREACH(const Subtitles_info& info, subtitles)
+		ui->subtitles->add(info.path, info.language);
 }
 
 

@@ -19,6 +19,8 @@
 **************************************************************************/
 
 
+#include <algorithm>
+
 #include <boost/foreach.hpp>
 
 #include <QtCore/QDir>
@@ -251,7 +253,7 @@ void get_tv_show_related_media(const QString& path, QList<QString>* videos, QLis
 		subtitles_filter << "*.srt";
 
 		QStringList subtitles_files = video_dir.entryList(
-			subtitles_filter, QDir::Files, QDir::Name | QDir::IgnoreCase | QDir::LocaleAware );
+			subtitles_filter, QDir::Files );
 
 		Q_FOREACH(const QString& file_name, subtitles_files)
 		{
@@ -279,6 +281,9 @@ void get_tv_show_related_media(const QString& path, QList<QString>* videos, QLis
 				MLIB_D("    %1", EE(e));
 			}
 		}
+
+		#warning
+		std::sort(subtitles->begin(), subtitles->end());
 	}
 	// Searching for subtitles <--
 }

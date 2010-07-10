@@ -26,6 +26,8 @@
 class QKeySequence;
 #include <QtGui/QMainWindow>
 
+#include <medialib/subtitles.hxx>
+
 #include <mlplayer/common.hpp>
 
 
@@ -42,8 +44,16 @@ class Main_window: public QMainWindow
 {
 	Q_OBJECT
 
+	private:
+		typedef medialib::Subtitles_info Subtitles_info;
+
+
 	public:
-		Main_window(QWidget* parent = 0);
+		Main_window(
+			const QList<QString>& videos,
+			const QList<Subtitles_info>& subtitles,
+			QWidget* parent = 0
+		);
 		~Main_window(void);
 
 

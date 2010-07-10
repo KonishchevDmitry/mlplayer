@@ -43,6 +43,10 @@ class Subtitles_info
 
 		/// Subtitles language.
 		QString	language;
+
+
+	public:
+		bool	operator<(const Subtitles_info& other) const;
 };
 
 

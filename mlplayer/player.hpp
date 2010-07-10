@@ -76,6 +76,11 @@ class Player: public QWidget
 		QStackedLayout* const		video_layout;
 
 
+	public:
+		/// Initializes the player with a list of video files that it should
+		/// play.
+		void	init(const QList<QString>& paths);
+
 	private:
 		/// Adds video to the list of available videos.
 		void	add_video(const QString& file_path);

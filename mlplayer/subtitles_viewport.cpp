@@ -35,8 +35,7 @@ Subtitles_viewport::Subtitles_viewport(QWidget *parent)
 	QWidget(parent),
 	layout(new QHBoxLayout(this))
 {
-	this->add("/my_files/programs/mlplayer.build/FlashForward.S01E16.HDTV.XviD-2HD.srt");
-	this->add("/my_files/programs/mlplayer.build/FlashForward - 1x16 - Season 1  Episode 16.HDTV.ru.srt", "ru");
+	this->layout->setContentsMargins(0, 0, 0, 0);
 }
 
 

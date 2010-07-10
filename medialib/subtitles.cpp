@@ -42,6 +42,27 @@ Subtitles_info::Subtitles_info(const QString& path, const QString& language)
 
 
 
+#warning
+bool Subtitles_info::operator<(const Subtitles_info& other) const
+{
+	QString this_real_language = ( this->language.isEmpty() ? "en" : this->language );
+	QString other_real_language = ( other.language.isEmpty() ? "en" : other.language );
+
+	if(this_real_language == "en" && other_real_language != "en")
+		return true;
+	else if(this_real_language != "en" && other_real_language == "en")
+		return false;
+	else
+	{
+		if(this_real_language == other_real_language)
+			return this->path < other.path;
+		else
+			return this_real_language < other_real_language;
+	}
+}
+
+
+
 Subtitle::Subtitle(void)
 :
 	start_time(0),
