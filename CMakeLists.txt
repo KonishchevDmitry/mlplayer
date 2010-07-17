@@ -11,14 +11,13 @@ cmake_minimum_required(VERSION 2.6)
 	set(APP_VERSION_PATCH 0)
 	set(APP_VERSION "0.0")
 
-# TODO
 	if(UNIX)
 		set(APP_BIN_DIR bin)
-#		set(APP_ICONS_DIR share/icons/hicolor)
+		set(APP_ICONS_DIR share/icons/hicolor)
 		set(APP_TRANSLATIONS_DIR share/${APP_UNIX_NAME}/translations)
-#	else()
+	else()
 		set(APP_BIN_DIR .)
-#		set(APP_ICONS_DIR icons)
+		set(APP_ICONS_DIR icons)
 		set(APP_TRANSLATIONS_DIR translations)
 	endif()
 # Application's properties <--
