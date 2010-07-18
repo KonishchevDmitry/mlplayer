@@ -25,25 +25,24 @@ QT4_WRAP_CPP(MLPLAYER_MOC_CPP ${MLPLAYER_MOC_SOURCES})
 QT4_WRAP_UI(MLPLAYER_UI_CPP ${MLPLAYER_UIS})
 
 
-# TODO
-## Desktop files
-#if(${CMAKE_SYSTEM_NAME} STREQUAL Linux)
-#	configure_file(${PROJECT_SOURCE_DIR}/${APP_UNIX_NAME}.desktop.in ${PROJECT_BINARY_DIR}/${APP_UNIX_NAME}.desktop)
-#	install(FILES ${PROJECT_BINARY_DIR}/${APP_UNIX_NAME}.desktop DESTINATION share/applications)
-#endif()
-#
-#
+# Desktop files
+if(${CMAKE_SYSTEM_NAME} STREQUAL Linux)
+	configure_file(${PROJECT_SOURCE_DIR}/${APP_UNIX_NAME}.desktop.in ${PROJECT_BINARY_DIR}/${APP_UNIX_NAME}.desktop)
+	install(FILES ${PROJECT_BINARY_DIR}/${APP_UNIX_NAME}.desktop DESTINATION share/applications)
+endif()
+
+
 ## Mans
 #if(UNIX)
 #	install(FILES ${PROJECT_SOURCE_DIR}/mans/${APP_UNIX_NAME}.1.gz DESTINATION share/man/man1)
 #	install(FILES ${PROJECT_SOURCE_DIR}/mans/ru/${APP_UNIX_NAME}.1.gz DESTINATION share/man/ru/man1)
 #endif()
-#
-#
-## Icons
-#install(DIRECTORY icons/ DESTINATION ${APP_ICONS_DIR})
-#
-#
+
+
+# Icons
+install(DIRECTORY icons/ DESTINATION ${APP_ICONS_DIR})
+
+
 ## Translations
 #QT4_ADD_TRANSLATION(MLPLAYER_QM ${MLPLAYER_TRANSLATIONS})
 #install(FILES ${MLPLAYER_QM} DESTINATION ${APP_TRANSLATIONS_DIR})

@@ -1,0 +1,17 @@
+Source: mlplayer
+Section: graphics
+Priority: optional
+Maintainer: Dmitry Konishchev <konishchev@gmail.com>
+Build-Depends: cdbs, debhelper (>= 7), cmake (>= 2.6),
+               libboost-dev (>= 1.34),
+               libqt4-dev (>= 4.5)
+Standards-Version: 3.8.4
+Homepage: TODO
+
+Package: mlplayer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Multi-language video player
+ This program is intended to make life easier for people who watches TV shows
+ or films on foreign language with subtitles for the purpose of learning this
+ language.

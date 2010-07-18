@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=@APP_NAME@
+GenericName=Multi-language video player
+GenericName[ru]=Мультиязычный видеоплеер
+Comment=Watch your favorite TV shows on several languages simultaneously for purpose of learning foreign language
+Comment[ru]=Смотрите ваши любимые сериалы на нескольких языках одновременно с целью изучения иностранного языка
+Icon=@APP_UNIX_NAME@
+Exec=@APP_UNIX_NAME@ %f
+Categories=AudioVideo;Video;Education;Player;Languages;Qt;
+MimeType=application/octet-stream;video/x-msvideo;
+Version=1.0
+
